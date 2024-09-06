@@ -2,30 +2,33 @@
 title: "Homework: Finding Your Way in R and Python"
 execute:
   error: true
-author: "Your Name"
+author: "Beenu Sareena"
 output: html_document
 ---
 
 Instructions: Once you have finished this assignment, render the document (Ctrl/Cmd-Shift-K or the Render button). Commit the qmd file and any other files you have changed to the repository and push your changes.
 
-In Canvas, submit a link to your github repository containing the updated files. 
+In Canvas, submit a link to your github repository containing the updated files.
 
-Note: Submitting your link in Canvas lets me know that you are ready for me to grade your homework. You can commit half-finished or not-working homework to GitHub, and it is good practice to commit frequently (at least at the end of each work session). 
+Note: Submitting your link in Canvas lets me know that you are ready for me to grade your homework. You can commit half-finished or not-working homework to GitHub, and it is good practice to commit frequently (at least at the end of each work session).
 
 # Modes of Execution
 
 Consider the 6 counting words examples in the [textbook module](https://srvanderplas.github.io/stat-computing-r-python/part-tools/04-scripts-notebooks.html#a-short-history-of-talking-to-computers) (they are in 3 separate 'your turn' sections). Look at the code, and then at the information provided for each example. What is different? What is the same? Write 2-3 sentences describing how script mode, interactive mode, and command-line mode differ in R and Python.
 
----
+------------------------------------------------------------------------
 
-Replace this line of text with your 2-3 sentences about script-mode, interactive mode, and command-line mode in R and Python
+-   Script mode in both R and Python allows for writing and executing multiple lines of code sequentially.
 
----
+-   Interactive mode in both R and Python allows users to type and execute code one line at a time. This is helpful for testing ideas quickly and fixing errors.
 
+-   In Python's command-line mode, we can easily run scripts that ask for user input while they're running. In R, doing this is usually a bit more complicated.In R, we need to tell the script what file to use before it starts running.
+
+------------------------------------------------------------------------
 
 # Programming with Variables
 
-In this section, you'll demonstrate that you understand how to solve simple math problems using code. First, you'll want to define variables to represent the variables in the equation. Give the variables values that can be used to determine the value of the variable on the other side of the `=`. Then, write code to solve the equation for the value of the variable. 
+In this section, you'll demonstrate that you understand how to solve simple math problems using code. First, you'll want to define variables to represent the variables in the equation. Give the variables values that can be used to determine the value of the variable on the other side of the `=`. Then, write code to solve the equation for the value of the variable.
 
 ## Pythagorean Theorem in R
 
@@ -34,19 +37,95 @@ $$a^2 + b^2 = c^2$$
 Use the chunk below to define variables $a$, $b$, and $c$, where you define the values of $a$ and $b$, and $c$ is determined mathematically. You may need to find the square root function in R to make this work.
 
 ```{r pythagorean-theorem-r}
-# Your pythagorean theorem code goes here
+a <- 3
+b <- 4
 
+#Pythagorean Theorem
+cat("a² + b² = c²","\n")
+
+c <- sqrt(a^2 + b^2)
+
+cat("a =", a, "\n")
+cat("b =", b, "\n")
+cat("a² + b² =", a^2 + b^2, "\n")
+cat("c² =", c^2, "\n")
+```
+
+## Pythagorean Theorem in Python
+
+```{python}
+import math
+
+a = 3
+b = 4
+
+#Pythagorean Theorem
+print(f"a² + b² = c²")
+
+c = math.sqrt(a**2 + b**2)
+
+print(f"a = {a}")
+print(f"b = {b}")
+print(f"a² + b² = {a**2 + b**2}")
+print(f"c² = {c**2}")
+print(f"c = {c}")
 ```
 
 ## Quadratic Formula in Python
 
 $$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
 
-Use the chunk below to define variables $a$, $b$, and $c$, and then define $x1$ and $x2$, the possible values for $x$. You may find it helpful to define a few additional variables, such as the value of the discriminant $\sqrt{b^2 - 4ac}$, to make it easier to calculate the results. 
+Use the chunk below to define variables $a$, $b$, and $c$, and then define $x1$ and $x2$, the possible values for $x$. You may find it helpful to define a few additional variables, such as the value of the discriminant $\sqrt{b^2 - 4ac}$, to make it easier to calculate the results.
 
 ```{python quad-formula-py}
-# Your quadratic formula code goes here
 
+import math
+
+a = 1
+b = 5
+c = 6
+
+#discriminant
+discriminant = math.sqrt(b**2 - 4*a*c)
+
+#x1 and x2
+x1 = (-b + discriminant) / (2*a)
+x2 = (-b - discriminant) / (2*a)
+
+print(f"a = {a}")
+print(f"b = {b}")
+print(f"c = {c}")
+print(f"Discriminant = {discriminant}")
+print(f"x₁ = {x1}")
+print(f"x₂ = {x2}")
+```
+
+## Quadratic Formula in R
+
+```{r}
+a <- 1
+b <- 5
+c <- 6
+
+#discriminant
+discriminant <- b^2 - 4*a*c
+
+#if non-negative
+if (discriminant >= 0) {
+  sqrt_discriminant <- sqrt(discriminant)
+  
+  x1 <- (-b + sqrt_discriminant) / (2*a)
+  x2 <- (-b - sqrt_discriminant) / (2*a)
+  
+  cat("a =", a, "\n")
+  cat("b =", b, "\n")
+  cat("c =", c, "\n")
+  cat("Discriminant =", discriminant, "\n")
+  cat("x₁ =", x1, "\n")
+  cat("x₂ =", x2, "\n")
+} else {
+  cat("The equation has no real roots because the discriminant is negative\n")
+}
 ```
 
 # Debugging practice
@@ -74,11 +153,45 @@ salary
 
 ------------------------------------------------------------------------
 
-The problem with the data is:
+The problem with the data is: The 'Salary' column is being read as a character vector instead of a numeric vector due to the presence of the dollar sign and commas in one of the salary values.
 
 Here is how I solved the problem:
+
+First, I use 'parse_number(Salary)' directly in the aesthetic mapping.
+
+```{r}
+library(readr)
+
+# This line reads in a tab-separated data file with a header naming the columns
+salary <- read.table("02-data.tsv", sep = "\t", header = T)
+
+# This code plots labels for each individual at location (x, y)
+library(ggplot2)
+ggplot(salary, aes(x = Hire.Year, y = parse_number(Salary), label = Name)) + 
+  geom_label()
+
+# This displays the salary object
+salary
+```
+
+But, this method only transforms the data for the plot. If I need to use the numeric salary values for other calculations or plots later, I need to clean the data in the original data frame.
+
+Then, I use gsub() to remove the dollar sign and commas from the 'Salary' column and convert the cleaned 'Salary' column to numeric using as.numeric() as following.
 
 ```{r cleaning-the-data-r}
 # Your implementation code goes here
 
+#data
+salary <- read.table("02-data.tsv", sep = "\t", header = TRUE)
+
+# Clean the Salary column
+salary$Salary <- as.numeric(gsub("[\\$,]", "", salary$Salary))
+
+#plot
+library(ggplot2)
+ggplot(salary, aes(x = Hire.Year, y = Salary, label = Name)) + 
+  geom_label()
+
+# Display the cleaned salary in dataframe
+print(salary)
 ```
